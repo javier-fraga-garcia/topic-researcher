@@ -51,7 +51,9 @@ def search_query(query: str) -> dict:
     }
 
     os.makedirs("./data", exist_ok=True)
-    with open(f"./data/queries_{str(uuid4())}.json", "w+") as f:
+    with open(
+        f"./data/queries_{str(uuid4())}_{datetime.now().strftime('%y%m%d')}.json", "w+"
+    ) as f:
         json.dump(final_data, f, indent=4, ensure_ascii=True)
 
     return final_data

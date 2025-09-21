@@ -1,10 +1,11 @@
 import textwrap
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 from selectolax.parser import HTMLParser
 from agents import function_tool
 
+
 @function_tool
-def scrape_url(url: str) -> list[str]:
+async def scrape_url(url: str) -> list[str]:
     """
     Scrape visible text content from a web page.
 
@@ -23,12 +24,12 @@ def scrape_url(url: str) -> list[str]:
 
     print(f"Scraping page {url}")
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            page = browser.new_page()
-            page.goto(url)
-            page_content = page.content()
-            browser.close()
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(url)
+            page_content = await page.content()
+            await browser.close()
 
         html = HTMLParser(page_content)
 
@@ -48,4 +49,4 @@ def scrape_url(url: str) -> list[str]:
 
     except Exception as e:
         print(f"Error scraping page: {str(e)}")
-        return f"Error scraping page {url}"
+        return [f"Error scraping page {url}"]
